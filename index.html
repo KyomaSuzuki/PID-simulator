@@ -11,12 +11,105 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
     <body>
-        <h1>PID制御シミュレータ</h1>
-        
-        <!---グラフを表示するキャンバス-->
-        <div class="chart-container">
-            <canvas id="mainChart"></canvas>
-        </div>
+        <header class="header">
+            <h1>PID制御シミュレータ</h1>
+            <p class="subtitle">制御応答を観察しよう</p>
+        </header>
+
+        <main class="main-grid">
+            <!--コントロールパネル-->
+            <aside class="control-panel">
+                <div class="card">
+                    <h2>PIDパラメータ</h2>
+
+                    <div class="slider-group">
+                        <label>
+                            <span>Kp（比例ゲイン）</span>
+                            <span class="value-display" id="kpValue">1.00</span>
+                        </label>
+                        <input type="range" id="kpSlider" min = "0",max="10" step="0.1" value="1.0">
+                        <p class ="hint">偏差に比例した制御。</p>
+                    </div>
+                    <div class="slider-group">
+                        <label>
+                            <span>Ki（積分ゲイン）</span>
+                            <span class="value-display" id="KiValue">0.00</span>
+                        </label>
+                        <input type="range" id="KiSlider" min="0",max="2" step="0.01" value="0.0">
+                        <p class="hint">過去の偏差を蓄積して補正。</p>
+                    </div>
+                    <div class="slider-group">
+                        <label>
+                            <span>Kd（微分ゲイン）</span>
+                            <span class="value-display" id="kdValue">0.00</span>
+                        </label>
+                        <input type="range" id="kdSlider" min="0" max="5" step="0.1" value="0.0">
+                        <p class="hint">変化速度に反応</p> 
+                    </div>
+                </div>
+
+                <!--信号タイプの選択-->
+                <div class="card">
+                    <h2>入力信号</h2>
+                    <div class="signal-buttons">
+                        <button class="signal-btn active" data-signal="step">ステップ</button>
+                        <button class="signal-btn" data-signal="ramp">ランプ</button>
+                        <button class="signal-btn" data-signal="sine">サイン波</button>
+                    </div>
+                </div>
+
+                <!--プリセット-->
+                <div class="card">
+                    <h2>プリセット</h2>
+                    <div class="preset-buttons">
+                        <button class="preset-btn" data-kp="1.0" data-ki="0" data-kd="0">P制御のみ</button>
+                        <button class="preset-btn" data-kp="1.0" data-ki="0.5" data-kd="0">PI制御</button>
+                        <button class="preset-btn" data-kp="2.0" data-ki="1.0" data-kd="0.5">PID（最適）</button>
+                        <button class="preset-btn" data-kp="5.0" data-ki="0" data-kd="0">P（振動的）</button>
+                        <button class="preset-btn" data-kp="10.0" data-ki="3.0" data-kd="0">不安定</button>
+                    </div>
+                </div>
+
+                <!--性能指標-->
+                <div class="card">
+                    <h2>性能指標</h2>
+                    <div class="metrics">
+                        <div class="metric">
+                            <span class="metric-label">オーバーシュート</span>
+                            <span class="metric-value" id="overshoot">--%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">立ち上がり時間</span>
+                            <span class="metric-value" id="trise">--s</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">整定時間</span>
+                            <span class="metric-value" id="tsettle">--s</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">定常偏差</span>
+                            <span class="metric-value" id="ess">--</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+        <!--グラフエリア-->
+        <section class="chart-area">
+            <div class="card chart-card">
+                <h2>システム応答</h2>
+                <div class="chart-container">
+                    <canvas id="mainChart"></canvas>
+                </div>
+            </div>   
+            <div class="card chart-card">
+                <h2>PID各成分</h2>
+                <div class="chart-container">
+                    <canvas id="componentChart"></canvas>
+                </div>
+            </div>
+        </section>
+        </main>
     <script src="script.js"></script>
     </body>
 </html>
